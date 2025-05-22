@@ -13,5 +13,6 @@
         public QualityStatus QualityStatus { get; set; }
         public string Notes { get; set; }
 
+
     }
 }
