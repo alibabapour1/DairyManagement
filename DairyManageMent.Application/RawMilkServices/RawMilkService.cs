@@ -1,4 +1,5 @@
-﻿using DairyManagement.Application.Helpers;
+﻿using DairyManagement.Application.Data;
+using DairyManagement.Application.Helpers;
 using DairyManagement.Domain.RawMilk;
 
 namespace DairyManageMent.Application.RawMilkServices;
@@ -6,8 +7,15 @@ namespace DairyManageMent.Application.RawMilkServices;
 public class RawMilkService : IRawMilkService
 {
     private readonly IRawMilkRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public Guid ReceiveRawMilk(RawMilkDto rawMilkDto)
+    public RawMilkService(IUnitOfWork unitOfWork, IRawMilkRepository repository)
+    {
+        _unitOfWork = unitOfWork;
+        _repository = repository;
+    }
+
+    public async Task<Guid> ReceiveRawMilk(RawMilkDto rawMilkDto)
     {
         if (rawMilkDto ==null)
         {
@@ -37,6 +45,11 @@ public class RawMilkService : IRawMilkService
 
         if (rawMilkDto.AcidityDegree >= 18 )
             rawMilk.QualityStatus= QualityStatus.Rejected;
+
+        _repository.Create(rawMilk);
+        await _unitOfWork.SaveChanges();
+
+        return rawMilk.Id;
 
 
 

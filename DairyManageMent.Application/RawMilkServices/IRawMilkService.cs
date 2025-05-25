@@ -2,5 +2,5 @@
 
 public interface IRawMilkService
 {
-    Guid ReceiveRawMilk(RawMilkDto rawMilkDto);
+    Task<Guid> ReceiveRawMilk(RawMilkDto rawMilkDto);
 }
